@@ -10,6 +10,22 @@ const config = defineConfig({
       "ignored-bare-import": "silent",
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['@tanstack/react-router', '@tanstack/react-start'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-slot'],
+          utils: ['tailwind-merge', 'clsx', 'date-fns'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
   plugins: [
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

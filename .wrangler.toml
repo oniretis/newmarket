@@ -1,7 +1,5 @@
 name = "newmarket"
-compatibility_date = "2024-01-01"
-
-# Try different possible entry points
+compatibility_date = "2026-02-09"
 main = "dist/server/server.js"
 
 [assets]
@@ -10,3 +8,4 @@ binding = "ASSETS"
 
 [vars]
 NODE_ENV = "production"
+BETTER_AUTH_SECRET = "onuXn"

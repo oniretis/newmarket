@@ -14,12 +14,6 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
-  build: {
-    target: "esnext",
-  },
-  define: {
-    global: "globalThis",
-  },
 });
 
 export default config;

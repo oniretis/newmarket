@@ -5,6 +5,11 @@ import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
+  esbuild: {
+    logOverride: {
+      "ignored-bare-import": "silent",
+    },
+  },
   plugins: [
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

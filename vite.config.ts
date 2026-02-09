@@ -15,7 +15,7 @@ const config = defineConfig({
     viteReact(),
   ],
   build: {
-    target: "webworker",
+    target: "esnext",
   },
   define: {
     global: "globalThis",

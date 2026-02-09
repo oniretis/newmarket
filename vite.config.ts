@@ -13,11 +13,23 @@ const config = defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['@tanstack/react-router', '@tanstack/react-start'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-slot'],
-          utils: ['tailwind-merge', 'clsx', 'date-fns'],
+        manualChunks: (id) => {
+          // Only apply manual chunks to client-side code
+          if (id.includes('node_modules')) {
+            if (id.includes('@tanstack/react-router') || id.includes('@tanstack/react-start')) {
+              return 'router';
+            }
+            if (id.includes('@radix-ui')) {
+              return 'ui';
+            }
+            if (id.includes('tailwind-merge') || id.includes('clsx') || id.includes('date-fns')) {
+              return 'utils';
+            }
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor';
+            }
+          }
+          return undefined;
         },
       },
     },

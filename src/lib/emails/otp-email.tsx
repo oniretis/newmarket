@@ -28,7 +28,7 @@ export function OtpEmail({
       <Body style={main}>
         <Container style={container}>
           <Section style={logoSection}>
-            <Heading style={logo}>Shop Stack</Heading>
+            <Heading style={logo}>Heywhymarketplace</Heading>
           </Section>
 
           <Section style={contentSection}>
@@ -53,7 +53,7 @@ export function OtpEmail({
 
           <Section style={footer}>
             <Text style={footerText}>
-              © {new Date().getFullYear()} Shop Stack. All rights reserved.
+              © {new Date().getFullYear()} Heywhymarketplace. All rights reserved.
             </Text>
           </Section>
         </Container>

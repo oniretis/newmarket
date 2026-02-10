@@ -23,7 +23,7 @@ export const Route = createRootRouteWithContext<{
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "ShopStack Multi-tenant E-commerce",
+        title: "Heywhymarketplace Multi-tenant E-commerce",
       },
     ],
     links: [

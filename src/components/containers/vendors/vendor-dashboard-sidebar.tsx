@@ -48,7 +48,7 @@ export default function VendorDashboardSidebar() {
             <Store className="size-6" />
           </div>
           <div className="grid flex-1 text-left leading-tight">
-            <span className="truncate font-bold text-base">ShopStack</span>
+            <span className="truncate font-bold text-base">Heywhymarketplace</span>
             <span className="truncate text-muted-foreground text-sm">
               Vendor Portal
             </span>

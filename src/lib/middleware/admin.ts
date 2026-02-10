@@ -39,3 +39,15 @@ export const adminMiddleware = createMiddleware().server(
     });
   }
 );
+
+export const requireAdminRole = async ({ context }: { context: any }) => {
+  if (!context.session || !context.session.user) {
+    throw new Error("Authentication required");
+  }
+
+  const isAdmin = await isUserAdmin(context.session.user.id);
+  
+  if (!isAdmin) {
+    throw new Error("Admin access required");
+  }
+};

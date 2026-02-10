@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import AdminTagsTemplate from "@/components/templates/admin/admin-tags-template";
-import { mockTags } from "@/data/tags";
+import { useAdminTags, useAdminCreateTag, useAdminDeleteTag } from "@/hooks/admin/use-admin-tags";
 import type { TagFormValues, TagItem } from "@/types/tags";
 
 export const Route = createFileRoute("/(admin)/admin/tags/")({
@@ -9,32 +9,37 @@ export const Route = createFileRoute("/(admin)/admin/tags/")({
 });
 
 function AdminTagsPage() {
-  const [tags, setTags] = useState<TagItem[]>(mockTags);
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  
+  const { data: tagsData, isLoading, error } = useAdminTags({
+    limit: 20,
+    offset: page * 20,
+    search: search || undefined,
+  });
+  
+  const createTagMutation = useAdminCreateTag();
+  const deleteTagMutation = useAdminDeleteTag();
 
-  const handleAddTag = (newTagData: TagFormValues) => {
-    const now = new Date().toISOString();
-    const newTag: TagItem = {
-      id: Date.now().toString(),
-      shopId: "1",
-      name: newTagData.name,
-      slug: newTagData.slug || newTagData.name.toLowerCase().replace(/\s+/g, "-"),
-      description: newTagData.description ?? null,
-      sortOrder: tags.length,
-      isActive: newTagData.isActive ?? true,
-      productCount: 0,
-      createdAt: now,
-      updatedAt: now,
-    };
-    setTags([...tags, newTag]);
+  const handleAddTag = (newTagData: TagFormValues & { shopId: string }) => {
+    createTagMutation.mutate(newTagData);
   };
 
   const handleDeleteTag = (tag: TagItem) => {
-    setTags(tags.filter((t) => t.id !== tag.id));
+    deleteTagMutation.mutate(tag.id);
   };
+
+  if (isLoading) {
+    return <div>Loading tags...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading tags: {error.message}</div>;
+  }
 
   return (
     <AdminTagsTemplate
-      tags={tags}
+      tags={tagsData?.tags || []}
       onAddTag={handleAddTag}
       onDeleteTag={handleDeleteTag}
     />

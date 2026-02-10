@@ -3,6 +3,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
+import { writeFileSync } from "fs";
 
 const config = defineConfig({
   esbuild: {
@@ -46,6 +47,19 @@ const config = defineConfig({
     tailwindcss(),
     tanstackStart(),
     viteReact(),
+    // Plugin to generate Cloudflare Workers entry point
+    {
+      name: 'generate-cf-worker-entry',
+      writeBundle() {
+        const workerContent = `import server from './server.js';
+
+// Cloudflare Workers expects a fetch handler as the default export
+export default {
+  fetch: server.fetch
+};`;
+        writeFileSync('dist/server/worker.js', workerContent);
+      }
+    }
   ],
 });
 

@@ -2,10 +2,10 @@ import type { ColumnDef } from "@tanstack/react-table";
 import DataTable from "@/components/base/data-table/data-table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { Product } from "@/data/products";
+import type { NormalizedProduct } from "@/types/products";
 
 interface AdminProductsTableProps {
-  products: Product[];
+  products: NormalizedProduct[];
   className?: string;
 }
 
@@ -13,7 +13,7 @@ export default function AdminProductsTable({
   products,
   className,
 }: AdminProductsTableProps) {
-  const columns: ColumnDef<Product>[] = [
+  const columns: ColumnDef<NormalizedProduct>[] = [
     {
       accessorKey: "id",
       header: "ID",
@@ -31,36 +31,35 @@ export default function AdminProductsTable({
       ),
     },
     {
-      accessorKey: "category.name",
+      accessorKey: "categoryName",
       header: "Category",
       cell: ({ row }) => (
         <div className="text-muted-foreground text-sm">
-          {row.original.category?.name || "-"}
+          {row.getValue("categoryName") || "-"}
         </div>
       ),
     },
     {
-      accessorKey: "brand",
+      accessorKey: "brandName",
       header: "Brand",
       cell: ({ row }) => (
         <div className="text-muted-foreground text-sm">
-          {row.getValue("brand") || "-"}
+          {row.getValue("brandName") || "-"}
         </div>
       ),
     },
     {
-      accessorKey: "price.current",
+      accessorKey: "sellingPrice",
       header: "Price",
       cell: ({ row }) => {
-        const price = row.original.price;
+        const sellingPrice = row.original.sellingPrice;
+        const regularPrice = row.original.regularPrice;
         return (
           <div className="font-medium">
-            {price.currency}
-            {price.current.toFixed(2)}
-            {price.discountPercentage > 0 && (
+            ${Number(sellingPrice).toFixed(2)}
+            {regularPrice && Number(regularPrice) > Number(sellingPrice) && (
               <span className="ml-2 text-muted-foreground text-xs line-through">
-                {price.currency}
-                {price.original.toFixed(2)}
+                ${Number(regularPrice).toFixed(2)}
               </span>
             )}
           </div>
@@ -68,48 +67,73 @@ export default function AdminProductsTable({
       },
     },
     {
-      accessorKey: "stock.quantity",
+      accessorKey: "stock",
       header: "Stock",
       cell: ({ row }) => {
         const stock = row.original.stock;
+        const lowStockThreshold = row.original.lowStockThreshold;
+        const inStock = stock > 0;
+        const isLowStock = stock <= lowStockThreshold;
+        
         return (
-          <Badge variant={stock.inStock ? "default" : "destructive"}>
-            {stock.inStock ? `${stock.quantity} in stock` : "Out of Stock"}
+          <Badge 
+            variant={!inStock ? "destructive" : isLowStock ? "secondary" : "default"}
+          >
+            {!inStock ? "Out of Stock" : isLowStock ? `Low Stock (${stock})` : `${stock} in stock`}
           </Badge>
         );
       },
     },
     {
-      accessorKey: "rating.average",
+      accessorKey: "averageRating",
       header: "Rating",
       cell: ({ row }) => {
-        const rating = row.original.rating;
+        const rating = Number(row.original.averageRating);
+        const reviewCount = row.original.reviewCount;
         return (
           <div className="flex items-center gap-2">
-            <span className="font-medium">{rating.average.toFixed(1)}</span>
+            <span className="font-medium">{rating.toFixed(1)}</span>
             <span className="text-muted-foreground text-xs">
-              ({rating.count} reviews)
+              ({reviewCount} reviews)
             </span>
           </div>
         );
       },
     },
     {
-      accessorKey: "store.name",
+      accessorKey: "shopName",
       header: "Store",
       cell: ({ row }) => (
         <div className="text-muted-foreground text-sm">
-          {row.original.store?.name || "-"}
+          {row.getValue("shopName") || "-"}
         </div>
       ),
     },
     {
-      accessorKey: "isOnSale",
-      header: "Sale",
+      accessorKey: "status",
+      header: "Status",
       cell: ({ row }) => {
-        const isOnSale = row.getValue("isOnSale") as boolean;
-        return isOnSale ? (
-          <Badge variant="secondary">On Sale</Badge>
+        const status = row.getValue("status") as string;
+        return (
+          <Badge 
+            variant={
+              status === "active" ? "default" : 
+              status === "draft" ? "secondary" : 
+              "outline"
+            }
+          >
+            {status}
+          </Badge>
+        );
+      },
+    },
+    {
+      accessorKey: "isFeatured",
+      header: "Featured",
+      cell: ({ row }) => {
+        const isFeatured = row.getValue("isFeatured") as boolean;
+        return isFeatured ? (
+          <Badge variant="secondary">Featured</Badge>
         ) : (
           <span className="text-muted-foreground">-</span>
         );

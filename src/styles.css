@@ -1,27 +1,31 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/roboto";
-@import "@fontsource-variable/roboto-mono";
+
+@font-face {
+  font-family: "General Sans";
+  src: url("/fonts/GeneralSans-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
 body {
   @apply m-0;
-  font-family:
-    "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu",
+  font-family: "General Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: "General Sans", monospace;
 }
 
 @theme inline {
-  --font-sans: "Roboto Variable", sans-serif;
-  --font-mono: "Roboto Mono Variable", monospace;
+  --font-sans: "General Sans", sans-serif;
+  --font-mono: "General Sans", monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -81,7 +85,7 @@ code {
   --card-foreground: oklch(0.218 0 89.876);
   --popover: oklch(1 0 89.876);
   --popover-foreground: oklch(0.218 0 89.876);
-  --primary: oklch(0.7 0.0394 72.41);
+  --primary: oklch(63.7% 0.237 25.331);
   --primary-70: oklch(0.777 0.0285 72.73);
   --primary-80: oklch(0.8525 0.0181 73.05);
   --primary-foreground: oklch(0.991 0 89.876);
@@ -127,7 +131,7 @@ code {
   --card-foreground: oklch(0.991 0 89.876);
   --popover: oklch(0.239 0 89.876);
   --popover-foreground: oklch(0.991 0 89.876);
-  --primary: oklch(0.7 0.0394 72.41);
+  --primary: oklch(63.7% 0.237 25.331);
   --primary-70: oklch(0.777 0.0285 72.73);
   --primary-80: oklch(0.8525 0.0181 73.05);
   --primary-foreground: oklch(0.1684 0 0);

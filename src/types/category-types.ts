@@ -37,11 +37,15 @@ export interface CategoryBreadcrumb {
 
 export interface CategoryFormValues {
   name: string;
-  slug: string;
-  description: string;
-  image: string | null;
-  icon: string;
-  parentId: string;
+  slug?: string;
+  description?: string;
+  image?: string | null;
+  icon?: string;
+  parentId?: string | null;
+  shopId?: string; // Optional for forms, required for API calls
+  sortOrder?: number;
+  isActive?: boolean;
+  featured?: boolean;
 }
 
 export interface CategoryOption {

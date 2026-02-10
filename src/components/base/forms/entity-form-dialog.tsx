@@ -290,10 +290,10 @@ export function EntityFormDialog<T extends Record<string, any>>({
                 value={fieldState.state.value}
                 onValueChange={fieldState.handleChange}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full transition-all duration-200 focus:ring-2 focus:ring-primary/20">
                   <SelectValue placeholder={field.placeholder} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-60 overflow-y-auto">
                   {options.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.icon ? (
@@ -327,6 +327,7 @@ export function EntityFormDialog<T extends Record<string, any>>({
         description={field.description}
         required={field.required}
         as={field.type === "textarea" ? "textarea" : undefined}
+        className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
         onBlur={
           fieldSchema
             ? field.required
@@ -355,47 +356,58 @@ export function EntityFormDialog<T extends Record<string, any>>({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={contentClassName ?? "sm:max-w-125"}>
-        <DialogHeader>
-          <DialogTitle>
+      <DialogContent className={`${contentClassName ?? "sm:max-w-[480px] max-h-[85vh] overflow-hidden"}`}>
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-xl font-semibold tracking-tight">
             {initialValues ? `Edit ${title}` : `Add New ${title}`}
           </DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogDescription className="text-muted-foreground">
+            {description}
+          </DialogDescription>
         </DialogHeader>
 
-        <Form form={form} className="space-y-4">
-          <div className="grid gap-4">{fields.map(renderField)}</div>
+        <div className="flex-1 overflow-hidden">
+          <Form form={form} className="space-y-6 h-full">
+            <div className="space-y-5 max-h-[50vh] overflow-y-auto px-1 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
+              {fields.map(renderField)}
+            </div>
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              size="lg"
-            >
-              Cancel
-            </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-            >
-              {([canSubmit, isSubmitting]) => (
+            <DialogFooter className="pt-4 border-t bg-background/95 backdrop-blur-sm">
+              <div className="flex w-full gap-3">
                 <Button
-                  type="submit"
-                  disabled={!canSubmit || isSubmitting || externalIsSubmitting}
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
                   size="lg"
+                  className="flex-1"
                 >
-                  {isSubmitting || externalIsSubmitting
-                    ? initialValues
-                      ? `${submitButtonText.update}...`
-                      : `${submitButtonText.create}...`
-                    : initialValues
-                      ? submitButtonText.update
-                      : submitButtonText.create}
+                  Cancel
                 </Button>
-              )}
-            </form.Subscribe>
-          </DialogFooter>
-        </Form>
+                <form.Subscribe
+                  selector={(state) => [state.canSubmit, state.isSubmitting]}
+                >
+                  {([canSubmit, isSubmitting]) => (
+                    <Button
+                      type="submit"
+                      disabled={!canSubmit || isSubmitting || externalIsSubmitting}
+                      size="lg"
+                      className="flex-1"
+                    >
+                      {isSubmitting || externalIsSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                          {initialValues ? `Updating...` : `Creating...`}
+                        </div>
+                      ) : (
+                        initialValues ? submitButtonText.update : submitButtonText.create
+                      )}
+                    </Button>
+                  )}
+                </form.Subscribe>
+              </div>
+            </DialogFooter>
+          </Form>
+        </div>
       </DialogContent>
     </Dialog>
   );

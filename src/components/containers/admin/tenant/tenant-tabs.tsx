@@ -38,7 +38,7 @@ export default function TenantTabs({ tenant }: AdminTenantDetailsProps) {
                   Store URL
                 </span>
                 <p className="cursor-pointer text-blue-600 underline">
-                  https://shopstack.com/{tenant.slug}
+                  https://Heywhymarketplace.com/{tenant.slug}
                 </p>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import { AddTagDialog } from "@/components/containers/shared/tags/add-tag-dialog";
+import { AdminAddTagDialog } from "@/components/containers/admin/tags/admin-add-tag-dialog";
 import TagHeader from "@/components/containers/shared/tags/tag-header";
 import TagTable from "@/components/containers/shared/tags/tag-table";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,7 @@ import type { TagFormValues, TagItem } from "@/types/tags";
 
 interface AdminTagsTemplateProps {
   tags: TagItem[];
-  onAddTag: (data: TagFormValues) => void;
+  onAddTag: (data: TagFormValues & { shopId: string }) => void;
   onDeleteTag: (tag: TagItem) => void;
 }
 
@@ -22,7 +22,7 @@ export default function AdminTagsTemplate({
   return (
     <div className="space-y-6">
       <TagHeader role="admin" showAddButton={false}>
-        <AddTagDialog
+        <AdminAddTagDialog
           open={isAddDialogOpen}
           onOpenChange={setIsAddDialogOpen}
           onSubmit={onAddTag}

@@ -8,6 +8,7 @@ import {
   searchFields,
   shopScopeFields,
   sortDirectionEnum,
+  ADMIN_DEFAULT_LIMIT,
   VENDOR_DEFAULT_LIMIT,
 } from "./base-query";
 
@@ -34,6 +35,17 @@ export const vendorCategoriesQuerySchema = z.object({
   ...paginationFields,
   limit: paginationFields.limit.default(VENDOR_DEFAULT_LIMIT),
   ...sortFields,
+  ...searchFields,
+  ...categoryFilterFields,
+});
+
+export const adminCategoriesQuerySchema = z.object({
+  ...paginationFields,
+  limit: paginationFields.limit.default(ADMIN_DEFAULT_LIMIT),
+  offset: z.coerce.number().min(0).optional().default(0),
+  ...sortFields,
+  sortBy: z.enum(["name", "createdAt", "sortOrder", "productCount"]).optional().default("sortOrder"),
+  sortDirection: sortDirectionEnum.optional().default("asc"),
   ...searchFields,
   ...categoryFilterFields,
 });
@@ -139,6 +151,7 @@ export const updateCategorySchema = z.object({
 
 export type CategorySortBy = z.infer<typeof categorySortByEnum>;
 export type VendorCategoriesQuery = z.infer<typeof vendorCategoriesQuerySchema>;
+export type AdminCategoriesQuery = z.infer<typeof adminCategoriesQuerySchema>;
 export type Category = z.infer<typeof categorySchema>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;

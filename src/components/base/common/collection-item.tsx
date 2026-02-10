@@ -6,7 +6,7 @@ interface CollectionItemProps {
   image: string;
   title: string;
   category: string;
-  fit: string;
+  sizes: string[];
   price: string;
   className?: string;
   onAddToCart?: () => void;
@@ -15,7 +15,7 @@ export default function CollectionItem({
   image,
   title,
   category,
-  fit,
+  sizes,
   price,
   className,
   onAddToCart,
@@ -48,7 +48,7 @@ export default function CollectionItem({
       <div className="mt-3 space-y-3.5">
         <h4 className="font-medium font-mono text-lg">{title}</h4>
         <p className="font-mono text-muted-foreground text-sm">
-          Fit: <span className="font-medium text-body-80">{fit}</span> Price:{" "}
+          Sizes: <span className="font-medium text-body-80">{sizes.join(", ")}</span> Price:{" "}
           <span className="font-medium text-body-80">{price}</span>
         </p>
         <Button

@@ -27,7 +27,7 @@ export default function CollectionContainer() {
           image={p.images[0].url}
           title={p.name}
           category={p.category.name}
-          fit="Regular"
+          sizes={p.sizes}
           price={`$${p.price.current}`}
           className={gridCellBorderClasses(index, columns2, columns3, true)}
           onAddToCart={() => handleAddToCart(p)}

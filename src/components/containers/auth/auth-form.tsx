@@ -274,23 +274,11 @@ export default function AuthForm({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="">            
             <Button
               variant="outline"
               size="lg"
-              onClick={() =>
-                authClient.signIn.social({
-                  provider: "github",
-                  callbackURL: redirectUrl || "/",
-                })
-              }
-              type="button"
-            >
-              GitHub
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
+              className="w-full"
               onClick={() =>
                 authClient.signIn.social({
                   provider: "google",

@@ -1,16 +1,16 @@
 export interface Staff {
   id: string;
-  name: string;
-  email: string;
+  userId: string;
+  name: string | null;
+  email: string | null;
   role: "admin" | "manager" | "staff";
   status: "active" | "invited" | "inactive";
   joinedDate: string;
-  avatar?: string;
+  avatar: string | null;
 }
 
 export interface StaffFormValues {
-  name: string;
-  email: string;
+  userId: string;
   role: "admin" | "manager" | "staff";
   status: "active" | "invited" | "inactive";
   avatar?: FileList | null;

@@ -18,7 +18,7 @@ export const auth = betterAuth({
   basePath: "/api/auth",
 
   // App name for TOTP issuer
-  appName: "Shop Stack",
+  appName: "Heywhymarketplace",
 
   // Security-related configuration
   // Use a deterministic dev secret if env is missing to prevent runtime errors
@@ -69,15 +69,7 @@ export const auth = betterAuth({
   },
 
   // Optional social providers if configured via env variables
-  socialProviders: {
-    ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
-      ? {
-          github: {
-            clientId: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-          },
-        }
-      : {}),
+  socialProviders: {    
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
       ? {
           google: {

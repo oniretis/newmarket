@@ -16,6 +16,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { AdminEditSettingDialog } from "./admin-edit-setting-dialog";
+import { adminDeleteSetting } from "@/lib/functions/admin/settings";
+import { toast } from "sonner";
 
 interface Setting {
   id: string;
@@ -107,9 +110,33 @@ const columns: ColumnDef<Setting>[] = [
                   >
                     Copy Key
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
-                    Reset to Default
+                  <DropdownMenuItem
+                    onClick={() => navigator.clipboard.writeText(setting.value)}
+                  >
+                    Copy Value
+                  </DropdownMenuItem>
+                  <AdminEditSettingDialog
+                    setting={setting}
+                    onSuccess={() => {
+                      // This will be handled by the parent component's refresh
+                      window.location.reload();
+                    }}
+                  >
+                    <DropdownMenuItem
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      Edit
+                    </DropdownMenuItem>
+                  </AdminEditSettingDialog>
+                  <DropdownMenuItem 
+                    className="text-destructive"
+                    onClick={() => {
+                      if (confirm(`Are you sure you want to delete the setting "${setting.key}"?`)) {
+                        handleDeleteSetting(setting.key);
+                      }
+                    }}
+                  >
+                    Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -126,8 +153,19 @@ const columns: ColumnDef<Setting>[] = [
 
 interface AdminSettingsTableProps {
   data: Setting[];
+  onRefresh?: () => void;
 }
 
-export function AdminSettingsTable({ data }: AdminSettingsTableProps) {
-  return <DataTable columns={columns} data={data} />;
+export function AdminSettingsTable({ data, onRefresh }: AdminSettingsTableProps) {
+  const handleDeleteSetting = async (key: string) => {
+    try {
+      await adminDeleteSetting({ key });
+      toast.success("Setting deleted successfully");
+      onRefresh?.();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to delete setting");
+    }
+  };
+
+  return <DataTable columns={columns} data={data} onRefresh={onRefresh} />;
 }

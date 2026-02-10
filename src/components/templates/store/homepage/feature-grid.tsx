@@ -5,7 +5,7 @@ export default function FeatureGrid() {
   return (
     <Section
       title="Crafting Trends, Inspiring Confidence"
-      description="Explore a world of fashion at ShopStack, where trends meet affordability."
+      description="where trends meet affordability."
     >
       <FeatureGridContainer />
     </Section>

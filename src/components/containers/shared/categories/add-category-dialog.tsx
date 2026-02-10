@@ -16,6 +16,8 @@ interface AddCategoryDialogProps {
   categories: CategoryOption[];
   isSubmitting?: boolean;
   initialValues?: CategoryFormValues | null;
+  isAdmin?: boolean;
+  shops?: Array<{ id: string; name: string }>;
 }
 
 export function AddCategoryDialog({
@@ -25,13 +27,28 @@ export function AddCategoryDialog({
   categories,
   isSubmitting = false,
   initialValues,
+  isAdmin = false,
+  shops = [],
 }: AddCategoryDialogProps) {
   const categoryOptions: EntityFormField["selectOptions"] = [
     { label: "None (Root Category)", value: "none" },
     ...categories.map((cat) => ({ label: cat.name, value: cat.id })),
   ];
 
+  const shopOptions: EntityFormField["selectOptions"] = shops.map(shop => ({
+    label: shop.name,
+    value: shop.id,
+  }));
+
   const fields: EntityFormField[] = [
+    ...(isAdmin ? [{
+      name: "shopId",
+      label: "Shop",
+      type: "select" as const,
+      required: true,
+      placeholder: "Select a shop",
+      selectOptions: shopOptions,
+    }] : []),
     {
       name: "name",
       label: "Category Name",

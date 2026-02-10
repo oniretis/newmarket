@@ -1,35 +1,89 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Building2, DollarSign, ShoppingBag, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getDashboardStats } from "@/lib/functions/admin/dashboard-stats";
+import { useQuery } from "@tanstack/react-query";
+import AdminDashboardChart from "@/components/containers/admin/admin-dashboard-chart-component";
+import AdminRecentActivity from "@/components/containers/admin/admin-recent-activity";
 
 export const Route = createFileRoute("/(admin)/admin/")({
   component: AdminDashboardPage,
 });
 
 function AdminDashboardPage() {
-  const stats = [
+  const { data: stats, isLoading, error } = useQuery({
+    queryKey: ["admin-dashboard-stats"],
+    queryFn: () => getDashboardStats(),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="font-bold text-3xl tracking-tight">Admin Dashboard</h2>
+          <p className="text-muted-foreground">
+            Platform-wide overview and statistics
+          </p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <div className="h-4 w-20 bg-muted animate-pulse rounded" />
+                <div className="h-4 w-4 bg-muted animate-pulse rounded" />
+              </CardHeader>
+              <CardContent>
+                <div className="h-8 w-16 bg-muted animate-pulse rounded mb-2" />
+                <div className="h-3 w-24 bg-muted animate-pulse rounded" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="font-bold text-3xl tracking-tight">Admin Dashboard</h2>
+          <p className="text-muted-foreground">
+            Platform-wide overview and statistics
+          </p>
+        </div>
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-destructive">Error loading dashboard data: {error.message}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  const dashboardStats = [
     {
       title: "Total Tenants",
-      value: "24",
-      change: "+3 new this month",
+      value: stats?.totalTenants.toLocaleString() ?? "0",
+      change: (stats?.tenantsChange ?? 0) > 0 ? `+${stats?.tenantsChange} new this month` : (stats?.tenantsChange ?? 0) < 0 ? `${stats?.tenantsChange} this month` : "No change",
       icon: Building2,
     },
     {
       title: "Total Users",
-      value: "1,234",
-      change: "+180 from last month",
+      value: stats?.totalUsers.toLocaleString() ?? "0",
+      change: (stats?.usersChange ?? 0) > 0 ? `+${stats?.usersChange} from last month` : (stats?.usersChange ?? 0) < 0 ? `${stats?.usersChange} from last month` : "No change",
       icon: Users,
     },
     {
-      title: "Total Orders",
-      value: "5,432",
-      change: "+1,234 from last month",
+      title: "Total Shops",
+      value: stats?.totalShops.toLocaleString() ?? "0",
+      change: (stats?.shopsChange ?? 0) > 0 ? `+${stats?.shopsChange} from last month` : (stats?.shopsChange ?? 0) < 0 ? `${stats?.shopsChange} from last month` : "No change",
       icon: ShoppingBag,
     },
     {
-      title: "Platform Revenue",
-      value: "$234,567",
-      change: "+12.5% from last month",
+      title: "Total Products",
+      value: stats?.totalProducts.toLocaleString() ?? "0",
+      change: (stats?.productsChange ?? 0) > 0 ? `+${stats?.productsChange} from last month` : (stats?.productsChange ?? 0) < 0 ? `${stats?.productsChange} from last month` : "No change",
       icon: DollarSign,
     },
   ];
@@ -44,7 +98,7 @@ function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
+        {dashboardStats.map((stat) => {
           const Icon = stat.icon;
           return (
             <Card key={stat.title}>
@@ -64,26 +118,8 @@ function AdminDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Platform Overview</CardTitle>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <div className="flex h-75 items-center justify-center text-muted-foreground">
-              Chart placeholder - Platform metrics over time
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex h-75 items-center justify-center text-muted-foreground">
-              Recent activity list placeholder
-            </div>
-          </CardContent>
-        </Card>
+        <AdminDashboardChart />
+        <AdminRecentActivity />
       </div>
     </div>
   );

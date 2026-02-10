@@ -22,7 +22,11 @@ export const auth = betterAuth({
 
   // Security-related configuration
   // Use a deterministic dev secret if env is missing to prevent runtime errors
-  secret: process.env.BETTER_AUTH_SECRET ?? "dev-secret",
+  secret: process.env.BETTER_AUTH_SECRET ?? (
+    process.env.NODE_ENV === "production" 
+      ? "PRODUCTION_SECRET_MUST_BE_SET_IN_ENVIRONMENT_VARIABLES"
+      : "dev-secret"
+  ),
   trustedOrigins: [
     // Local development
     process.env.VITE_BETTER_AUTH_URL!,

@@ -3,13 +3,17 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
-import { writeFileSync } from "fs";
+import { writeFileSync, mkdirSync } from "fs";
+import { dirname } from "path";
 
 const config = defineConfig({
   esbuild: {
     logOverride: {
       "ignored-bare-import": "silent",
     },
+    keepNames: true,
+    minify: false, // Disable minification for debugging
+    target: "esnext",
   },
   build: {
     rollupOptions: {
@@ -22,6 +26,9 @@ const config = defineConfig({
             }
             if (id.includes('@radix-ui')) {
               return 'ui';
+            }
+            if (id.includes('input-otp')) {
+              return 'otp';
             }
             if (id.includes('tailwind-merge') || id.includes('clsx') || id.includes('date-fns')) {
               return 'utils';
@@ -37,7 +44,7 @@ const config = defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'input-otp'],
   },
   plugins: [
     // this is the plugin that enables path aliases
@@ -57,7 +64,17 @@ const config = defineConfig({
 export default {
   fetch: server.fetch
 };`;
-        writeFileSync('dist/server/worker.js', workerContent);
+        
+        const workerPath = 'dist/server/worker.js';
+        
+        // Ensure directory exists
+        try {
+          mkdirSync(dirname(workerPath), { recursive: true });
+        } catch (error) {
+          // Directory might already exist, ignore error
+        }
+        
+        writeFileSync(workerPath, workerContent);
       }
     }
   ],

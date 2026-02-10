@@ -87,11 +87,24 @@ function getSql() {
   if (!sqlClient) {
     const url = process.env.DATABASE_URL;
     if (!url) {
-      throw new Error(
-        "DATABASE_URL environment variable is not set. Please check your .env file.",
-      );
+      if (process.env.NODE_ENV === "production") {
+        console.error("DATABASE_URL environment variable is not set in production");
+        // Return a mock SQL client for production that throws descriptive errors
+        sqlClient = new Proxy({} as NeonQueryFunction<false, false>, {
+          get() {
+            throw new Error("Database not configured. Please set DATABASE_URL environment variable in Cloudflare Workers.");
+          },
+          apply() {
+            throw new Error("Database not configured. Please set DATABASE_URL environment variable in Cloudflare Workers.");
+          }
+        });
+      } else {
+        throw new Error(
+          "DATABASE_URL environment variable is not set. Please check your .env file.",
+        );
+      }
     }
-    sqlClient = neon(url);
+    sqlClient = neon(url || "mock://fallback");
   }
   return sqlClient;
 }

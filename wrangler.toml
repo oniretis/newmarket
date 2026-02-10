@@ -1,0 +1,25 @@
+name = "newmarket"
+main = "dist/server/worker.js"
+compatibility_date = "2026-02-09"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist/client"
+binding = "ASSETS"
+
+[vars]
+NODE_ENV = "production"
+# Database Configuration
+DATABASE_URL = "${DATABASE_URL}"
+# Authentication Configuration  
+BETTER_AUTH_SECRET = "${BETTER_AUTH_SECRET}"
+BETTER_AUTH_URL = "https://newmarket.oluwatunbo.workers.dev"
+# Email Configuration (Optional)
+# SMTP_HOST = "smtp.gmail.com"
+# SMTP_PORT = "587" 
+# SMTP_USER = "your-email@gmail.com"
+# SMTP_PASS = "your-app-password"
+# EMAIL_FROM = "Heywhymarketplace <noreply@yourdomain.com>"
+#GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+#GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+#VITE_UPLOADCARE_PUB_KEY=4a50237d8a3436d24465

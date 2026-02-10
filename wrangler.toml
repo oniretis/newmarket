@@ -10,9 +10,9 @@ binding = "ASSETS"
 [vars]
 NODE_ENV = "production"
 # Database Configuration
-DATABASE_URL = "postgresql://neondb_owner:npg_VcuMSY2wp6Xq@ep-steep-star-aiuunl6d-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+DATABASE_URL = "${DATABASE_URL}"
 # Authentication Configuration  
-BETTER_AUTH_SECRET = "onuXnZ4C42HX4P4rAWjcwkn7gZZExvxG"
+BETTER_AUTH_SECRET = "${BETTER_AUTH_SECRET}"
 BETTER_AUTH_URL = "https://newmarket.oluwatunbo.workers.dev"
 # Email Configuration (Optional)
 # SMTP_HOST = "smtp.gmail.com"
@@ -22,4 +22,4 @@ BETTER_AUTH_URL = "https://newmarket.oluwatunbo.workers.dev"
 # EMAIL_FROM = "Heywhymarketplace <noreply@yourdomain.com>"
 #GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
 #GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-#VITE_UPLOADCARE_PUB_KEY=4a50237d8a3436d24465
+#VITE_UPLOADCARE_PUB_KEY=${VITE_UPLOADCARE_PUB_KEY}
